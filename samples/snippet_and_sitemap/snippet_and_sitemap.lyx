@@ -1,5 +1,5 @@
-#LyX 1.6.9 created this file. For more info see http://www.lyx.org/
-\lyxformat 345
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
 \begin_document
 \begin_header
 \textclass book
@@ -9,18 +9,26 @@ eqs-within-sections
 figs-within-sections
 theorems-ams
 \end_modules
+\maintain_unincluded_children false
 \language english
+\language_package default
 \inputencoding auto
+\fontencoding global
 \font_roman default
 \font_sans default
 \font_typewriter default
 \font_default_family default
+\use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
 
 \graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
 \paperfontsize default
 \spacing single
 \use_hyperref false
@@ -28,9 +36,18 @@ theorems-ams
 \use_geometry false
 \use_amsmath 1
 \use_esint 1
+\use_mhchem 1
+\use_mathdots 1
 \cite_engine basic
 \use_bibtopic false
+\use_indices false
 \paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation skip
@@ -41,8 +58,9 @@ theorems-ams
 \paperpagestyle default
 \tracking_changes false
 \output_changes false
-\author "" 
-\author "" 
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
 \end_header
 
 \begin_body
@@ -54,62 +72,64 @@ name "cha:Snippets-and-SiteMap"
 
 \end_inset
 
-Snippets and SiteMap
+Snippets y SiteMap
 \end_layout
 
 \begin_layout Standard
-Lift services HTTP request in three ways: generating HTML pages, low level
- HTTP responses (e.g., REST), and responding to Ajax/Comet requests.
- Lift treats each type of request differently to make the semantics for
- responding to each type of request most natural.
- Put another way, it's different to build a complex HTML page with lots
- of different components than to send back some JSON data that corresponds
- to a database record.
+Lift sirve las peticiones HTTP de tres maneras: generando páginas HTML,
+ respuestas HTTP de bajo nivel(e.j.
+ REST), y respondiendo a peticiones Ajax/Comet.
+ Lift trata cada tipo de petición de diferente manera para hacer que la
+ semantica de respuesta para cada tipo de petición se más natural.
+ Dicho de otra manera, es diferente construir una página HTML compleja con
+ un montón de diferentes componentes que enviar de vuelta algunos datos
+ JSON que corresponden a algún registro de base de datos.
 \end_layout
 
 \begin_layout Standard
-In this chapter, we're going to explore how Lift does dynamic HTML page
- generation based on the incoming HTTP request and URL including putting
- 
+En este capítulo se explorará como Lift realizá la generación dinámica de
+ páginas HTML en base a la petición HTTP entrante, incluyendo el hecho de
+ poner 
 \begin_inset Quotes eld
 \end_inset
 
-chrome
+cromo
 \begin_inset Quotes erd
 \end_inset
 
- around the HTML page (menus, etc.), placing dynamic content on each page,
- and site navigation including access control.
+ alrededor de la página HTML(menus, etc.), colocando contenido dinámico en
+ cada página, y navegación del sitio, incluso control de acceso.
 \end_layout
 
 \begin_layout Standard
-The code for this chapter can be found in the 
+El código de este capítulo se encuentra en el directorio 
 \family typewriter
-samples/snippet_and_sitemap
+samples/snippet_and_sitemap 
 \family default
- directory of the 
-\emph on
-Simply Lift
-\emph default
- 
+de la 
 \begin_inset CommandInset href
 LatexCommand href
-name "distribution"
+name "distribución"
 target "https://github.com/dpp/simply_lift/tarball/master"
 
 \end_inset
 
+ de 
+\emph on
+Simply Lift
+\emph default
 .
 \end_layout
 
 \begin_layout Section
-Starting at the beginning: 
+Empezando por el principio: 
 \family typewriter
 Boot.scala
 \end_layout
 
 \begin_layout Standard
-When your Lift application first starts up, it executes the code in Boot.scala:
+Cuando una aplicación Lift arranca, se ejecuta el código que se encuentra
+ en Boot.scala:
 \end_layout
 
 \begin_layout Standard
@@ -124,74 +144,78 @@ lstparams "caption={Boot.scala}"
 \end_layout
 
 \begin_layout Standard
-Rather than keeping configuration parameters in XML files, Lift keeps configurat
-ion parameters in code in 
+En lugar de mantener parámetros de configuración en archivos XML, Lift mantiene
+ los parámetros de configuración en código dentro de 
 \family typewriter
 Boot
 \family default
 .
- Boot is executed once when the servlet container loads the Lift application.
- You can change many of Lift's execution rules in the 
+ Boot se ejecuta una sola vez cuando el contenedor de servlets carga la
+ aplicación Lift.
+ Se puede cambiar muchas de las reglas de ejecución de Lift que se encuentran
+ dentro del singleton 
 \family typewriter
 LiftRules
 \family default
- singleton during boot, but after boot, these parameters are frozen.
+ durante el arranque, pero luego del arranque, estos parámetros estan congelados.
 \end_layout
 
 \begin_layout Subsection
-
+Reglas
 \family typewriter
-LiftRules
-\family default
- rules
+ LiftRules
 \end_layout
 
 \begin_layout Standard
-Most of the configuration parameters that define how Lift will convert an
- HTTP request into a response are contained in the 
+La mayoría de los parámetros de configuración que definen como Lift convertirá
+ una petición HTPP en una respuesta estan contenidas en el singleton 
 \family typewriter
 LiftRules
 \family default
- singleton.
- Some of the parameters for 
+.
+ Algunos parámtros de 
 \family typewriter
 LiftRules
 \family default
- are used commonly and some are very infrequently changed from their default.
- LiftRules can be changed during boot, but not at other times.
- So, set all your configuration in boot (or in methods that are called from
- boot).
+ son usados comunmente y algunos son muy rara vez cambiados de su comportamiento
+ por defecto.
+ LiftRules puede ser cambiado durante el arranque, pero no en otro tiempo.
+ Entonces, se debe poner todas la configuraciones en boot(o en métodos que
+ son llamados desde boot).
 \end_layout
 
 \begin_layout Subsection
-Properties and Run modes
+Propiedades y modos de ejecución
 \end_layout
 
 \begin_layout Standard
-While many properties for your running application can be defined in 
+Mientras muchas de las propiedades para la aplicación pueden ser definidas
+ en 
 \family typewriter
 Boot.scala
 \family default
-, there are some properties that are best defined in a text file.
- Lift supports multiple properties files per project.
- The properties files are loaded based on the user, machine and run mode.
+, existen algunas propiedades que es mejor definirlas en un archivo de texto.
+ Lift soporta multiples archivos de propiedades por proyecto.
+ Los archivos de propiedades son cargados en base al usuario, máquina, y
+ modo de ejecución.
 \end_layout
 
 \begin_layout Standard
-If you want to provide a configuration file for a subset of your application
- or for a specific environment, Lift expects configuration files to be named
- in a manner relating to the context in which they are being used.
- The standard name format is:
+Si se quiere proveer un archivo de configuración para un subconjunto de
+ la aplicación o para un entorno en específico, Lift espera que los nombres
+ de los archivos esten relacionados de alguna manera al contexto donde estan
+ siendo usados.
+ El formato estandar es:
 \end_layout
 
 \begin_layout Standard
 
 \family typewriter
-modeName.userName.hostName.props
+modeDeEjecucion.nombreDeUsuario.nombreDeHost.props
 \end_layout
 
 \begin_layout Standard
-examples:
+ejemplos:
 \family typewriter
 
 \begin_inset Newline newline
@@ -221,53 +245,53 @@ default.props
 \end_layout
 
 \begin_layout Standard
-with hostName and userName being optional, and modeName being one of "test",
- "staging", "production", "pilot", "profile", or blank (for development
- mode).
- The standard Lift properties file extension is "props".
+nombreDeHost y nombreDeUsuario son opcionales, y el modoDeEjecucion debe
+ ser "test", "staging", "production", "pilot", "profile", o en blanco (para
+ modo de desarrollo).
+ La extensión estándar para archivos de propiedades en Lift es "props".
 \end_layout
 
 \begin_layout Standard
-Place properties files in the 
+Se debe colocar los archivos de propiedades en el directorio 
 \family typewriter
 src/main/resources/props
 \family default
- directory in your project and they will be packaged up as part of the build
- process.
+ del proyecto y estos serán empaquetados como parte del proceso de construcción.
 \end_layout
 
 \begin_layout Standard
-When you're developing your Lift application, the run mode (see 
+Cuando se esta desarrollando la aplicación Lift, el modo de ejecución (see
+ 
 \family typewriter
 net.liftweb.util.Props.mode
 \family default
-) will be 
+) será 
 \family typewriter
 Development
 \family default
 .
- When you deploy your application, pass 
+ Cuando se hace un despliegue(deploy) de la aplicación, se pasa 
 \family typewriter
 -Drun.mode=production
 \family default
- to your web container.
- In production mode, Lift aggressively caches templates, snippet classes,
- etc.
+ al contenedor web.
+ En modo de producción(production mode), Lift hace un cache agresivo de
+ las plantillas, clases de snippets, etc.
 \end_layout
 
 \begin_layout Subsection
-By convention
+Por convención
 \end_layout
 
 \begin_layout Standard
-Lift, like Rails, will look for items in certain locations by convention.
- For example, Lift will look for classes that implement snippets in the
+Lift, como Rails, buscará por conveción items en ciertas ubicaciones.
+ Por ejemplo, Lift buscará clases que implementan snippets en el paquete
  
 \family typewriter
 xxx.snippet
 \family default
- package where the xxx part is the main package for your application.
- You define one or more packages for Lift to look in with:
+ donde xxx es el paquete principal de la aplicación.
+ Se define uno o más paquetes en los que Lift buscará snippets usando:
 \end_layout
 
 \begin_layout Standard
@@ -277,7 +301,7 @@ status open
 
 \begin_layout Plain Layout
 
-    // where to search snippet
+    // Donde buscar snippet
 \end_layout
 
 \begin_layout Plain Layout
@@ -291,12 +315,12 @@ status open
 \end_layout
 
 \begin_layout Standard
-Here, we've added the 
+Aquí, se ha añadido el paquede 
 \family typewriter
 code
 \family default
- package to the list of packages that Lift will search through.
- You can also do 
+ a la lista de paquetes dentro de los que Lift buscará.
+ También se puede hacer 
 \family typewriter
 LiftRules.addToPackages("com.fruitbat.mydivision.myapplication")
 \family default
@@ -308,9 +332,10 @@ Misc Rules
 \end_layout
 
 \begin_layout Standard
-We'll skip the sitemap definition until the next section.
- This rule defines how to show a spinning icon during Ajax calls (Lift will
- automatically show the spinning icon if this function is enabled):
+Se saltarña la definición de sitemap hasta la siguiente sección.
+ La regla a continuación define como mostrar un ícono que gira durante las
+ llamadas Ajax (Lift mostrará automaticamente el icono giratorio si esta
+ función está habilitada):
 \end_layout
 
 \begin_layout Standard
@@ -320,7 +345,7 @@ status open
 
 \begin_layout Plain Layout
 
-    //Show the spinny image when an Ajax call starts
+    //Muestra un ícono que gira cuando una llamada Ajax se inicia
 \end_layout
 
 \begin_layout Plain Layout
@@ -339,8 +364,8 @@ status open
 \end_layout
 
 \begin_layout Standard
-And this rule sets the default character encoding to UTF-8 rather than the
- default platform encoding:
+Y esta regla coloca como codificación de carácteres por defecto a UTF-8
+ en lugar de la codificación por defecto de la plataforma:
 \end_layout
 
 \begin_layout Standard
@@ -350,7 +375,7 @@ status open
 
 \begin_layout Plain Layout
 
-    // Force the request to be UTF-8
+    // Obliga que las solicitudes sean UTF-8
 \end_layout
 
 \begin_layout Plain Layout
@@ -365,8 +390,8 @@ status open
 
 \begin_layout Standard
 Okay...
- you get the idea...
- there are plenty of parameters to tune during boot.
+ ya se tiene una idea...
+ existen muchos parámetros que se pueden poner a punto durante el arranque.
 \end_layout
 
 \begin_layout Subsection
@@ -374,28 +399,27 @@ Html5
 \end_layout
 
 \begin_layout Standard
-Prior to Lift 2.2, Lift treated all templates as XHTML and emitted XHTML
- to the browser.
- When the Lift project started in early 2007, this seemed like a Really
- Good Idea™.
- Turns out the world has not adopted XHTML and some JavaScript libraries,
- e.g.
- Google Maps, doesn't work on XHTML pages.
- Lift 2.2 introduced optional Html5 support both in the parser (so it could
- read Html5 templates rather than requiring well formed XML in templates)
- and emits Html5 to the browser.
- Lift still processes pages as Scala 
+Antes de Lift 2.2, Lift Lift trata todos las plantillas como XHTML y emite
+ XHTML al navegador.
+ Cuando el proyecto Lift se inicio a principios del 2007, esto parecía una
+ Muy Buena Idea™.
+ Resulta que el mundo no ha apodtado XHTML y que algunas bibliotecas, por
+ ejemplo Google Maps, no funcionan con páginas XHTML.
+ Lift 2.2 introduce soporte opcional de Html5 tanto en el parser (para que
+ asi pueda leer plantillas Html5 en lugar de requerir plantillas XML bien
+ formadas) y emite Html5 al navegador.
+ Lift todavía procesa las páginas como elementos 
 \family typewriter
 NodeSeq
 \family default
- elements, so no changes are required to the application.
+ de Scala, por lo que no ser requieren cambios en la aplicación.
 \end_layout
 
 \begin_layout Standard
-In order to keep Lift 2.2 apps backward compatible with Lift's XHTML support,
- by default the XHTML parser/serializer are used.
- However, it's recommended to use the Html5 support which can be turned
- on in boot with:
+En orden de mantener compatibles hacia atras con el soporte XHTML de Lift,
+ por defecto se usa el parser/serializer XHTML.
+ Sin embargo, se recomienda usar el soporte Html5, que puede ser activa
+ en el boot usando:
 \end_layout
 
 \begin_layout Standard
@@ -405,7 +429,7 @@ status open
 
 \begin_layout Plain Layout
 
-    // Use HTML5 for rendering
+    // Usar HTML5 para el renderizado
 \end_layout
 
 \begin_layout Plain Layout
@@ -436,46 +460,46 @@ SiteMap
 \end_layout
 
 \begin_layout Standard
-Lift has an optional feature called SiteMap.
- You don't have to use it.
- But if you do set a sitemap in boot, then Lift will use the sitemap as
- a white list of HTML pages for your site (note that REST URLs do not need
- to be listed in the sitemap).
- SiteMap defines navigation and access control, allows you to create hierarchica
-l menus, grouped menu items, display the entire sitemap, a relative sitemap,
- as well breadcrumbs.
- This section will discuss some of SiteMap's capabilities.
+Lift tiene una caracterísitca opcional llamada SiteMap.
+ No es necesario usarla.
+ Pero si se coloca un sitemap en el boot, entonces Lift usa el sitemap como
+ una lista blanca de páginas HTML para el sitio (notar que las URLs REST
+ no necesitan estar listadas en el sitemap).
+ El SiteMap define la navegación y control de acceso, permite la creación
+ de menués jerarquicos, agrupar los elementos del menú, mostrar el sitemap
+ completo, un sitemap relativo, como también migas de pan.
+ En esta sección se discutirán algunas de las capacidades del SiteMap.
 \end_layout
 
 \begin_layout Subsection
-Defining the 
+
 \family typewriter
-SiteMap
+Definir el mapa del sitio
 \end_layout
 
 \begin_layout Standard
-The SiteMap must be defined in boot and is only defined once
+El SiteMap debe ser definido en el boot y solamente una vez
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-In development mode, the sitemap can be changed dynamically to support changes
- to site content without having to re-start your application each time navigatio
-n changes.
- This is a development-time feature only.
- There are significant performance penalties associated with rebuilding
- the sitemap on each page load including forcing the serialization of serving
- pages.
- There are plenty of features in SiteMap that allow you to enable/disable
- menu items and have dynamically generated submenus.
- Don't rely on Lift's development-mode menu reloading for your application
- design.
+En modo de desarrollo, el sitemap puede ser cambiado dinamicamente para
+ soportar cambios en el contendio del sitio sin tener que reiniciar tu aplicacio
+n cada vez que la navegación cambie.
+ Esta es una característica que solo esta disponible en tiempo de desarrollo.
+ Existen sanciones significativas en el rendimiento asocidadas a la reconstrucci
+ón del sitemap en cada carga de página, incluyendo el obligar la serialización
+ al servir páginas.
+ Existen muchas características en el SiteMap que permiten habilitar/deshabilita
+r items del menú y tener submenués dinamicamente generados.
+ No hay que basarse en el modo de desarrollo (development-mode) de Lift
+ para diseñar una aplicación.
 \end_layout
 
 \end_inset
 
 .
- Typcially, you will define a function that returns a SiteMap instance:
+ Típicamente, se define una función que devuelve una instancia de SiteMap:
 \end_layout
 
 \begin_layout Standard
@@ -485,7 +509,7 @@ status open
 
 \begin_layout Plain Layout
 
-    // Build SiteMap
+    // Construir el SiteMap
 \end_layout
 
 \begin_layout Plain Layout
@@ -499,11 +523,11 @@ status open
 \end_layout
 
 \begin_layout Standard
-And then define the 
+Y después se define el 
 \family typewriter
 SiteMap
 \family default
- in 
+ en 
 \family typewriter
 LiftRules
 \family default
@@ -517,13 +541,13 @@ status open
 
 \begin_layout Plain Layout
 
-    // set the sitemap.
-  Note if you don't want access control for
+    // Se establece el sitemap.
+  Nota, si no se quiere tener control de acceso
 \end_layout
 
 \begin_layout Plain Layout
 
-    // each page, just comment this line out.
+	// para cada página comenta esta linea
 \end_layout
 
 \begin_layout Plain Layout
@@ -537,59 +561,60 @@ status open
 \end_layout
 
 \begin_layout Standard
-In development mode, the function will be called on each page load to rebuilt
- the SiteMap.
- In all other Lift run modes, the sitemap will be built once during boot.
+En modo de desarrollo, la función será llamada para reconstruir el SiteMap
+ cada vez que una página se cargueI.
+ En todos los otros modos de ejecución, el sitemap solo será reconstruido
+ una sola vez durante el arranque.
 \end_layout
 
 \begin_layout Standard
-A 
+Un 
 \family typewriter
 SiteMap
 \family default
- is a collection of 
+ es una colección de instancias de 
 \family typewriter
 Menu
 \family default
- instances.
- Each 
+.
+ Cada 
 \family typewriter
 Menu
 \family default
- has one 
+ tiene un 
 \family typewriter
 Loc[_]
 \family default
- and a set of 
+ y un conjutno de instancias de 
 \family typewriter
 Menu
 \family default
- instances as submenus (zero or more).
- Each 
+ como submenués (cero o más).
+ Cada instancia de 
 \family typewriter
 Menu
 \family default
- instance has a unique name.
+ tiene un nombre único.
 \end_layout
 
 \begin_layout Standard
-If an HTML page is not defined in the sitemap, Lift will not serve it.
- SiteMap is a white list of pages to serve.
- Further, the 
+Si una página HTML no esta definida en el sitemap, Lift no la servirá.
+ El SiteMap es una lista blanca de páginas a servir.
+ Adicionalmente, el 
 \family typewriter
 Loc[_]
 \family default
- has parameters that can include multiple access control rules.
+ tiene parámetros que pueden incluir múltiples reglas de control de acceso.
 \end_layout
 
 \begin_layout Subsection
-Simplest 
+El 
 \family typewriter
-SiteMap
+SiteMap más simple
 \end_layout
 
 \begin_layout Standard
-The simplest sitemap defines a single page:
+El sitemap más simple define una sola página:
 \end_layout
 
 \begin_layout Standard
@@ -608,8 +633,8 @@ status open
 \end_layout
 
 \begin_layout Standard
-This is a SiteMap with a single menu item.
- The Menu has the name 
+Este es un SiteMap con un solo item de menú.
+ El Menú tiene el nombre 
 \begin_inset Quotes eld
 \end_inset
 
@@ -617,14 +642,14 @@ Home
 \begin_inset Quotes erd
 \end_inset
 
- and will be displayed as the localized (see 
+ y será mostrado localizadamente como (ver 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sec:Localization"
 
 \end_inset
 
-) string 
+) cadena 
 \begin_inset Quotes eld
 \end_inset
 
@@ -633,11 +658,11 @@ Home
 \end_inset
 
 .
- The Menu.i method generates a 
+ El método Menu.i genera un 
 \family typewriter
 Menu
 \family default
- with a 
+ con un 
 \family typewriter
 Loc[Unit]
 \family default
@@ -649,21 +674,21 @@ Loc[Unit]
 \family typewriter
 Menu
 \family default
- and 
+ y 
 \family typewriter
 Loc[_]
 \end_layout
 
 \begin_layout Standard
-You may be wondering why a 
+Es posible que se pregunte por qué un 
 \family typewriter
 Menu
 \family default
- and a 
+ y un 
 \family typewriter
 Loc[_]
 \family default
- (short for location, pronouned 
+ (abreviación de location, pronunciado 
 \begin_inset Quotes eld
 \end_inset
 
@@ -671,44 +696,44 @@ Loke
 \begin_inset Quotes erd
 \end_inset
 
-) are separate and why the Loc takes a type parameter.
+) estan separados y por qué el Loc recibe un parámetro de tipo.
 \end_layout
 
 \begin_layout Standard
-A 
+Un 
 \family typewriter
 Menu
 \family default
- contains a location and many submenus.
- The original thought was that you could have a single 
+ contiene un location y varios submenús.
+ La idea original era que uno podía tener un solo 
 \family typewriter
 Loc[_]
 \family default
- that might be placed in different places in the menu hierarchy.
- So, historically, they are separated, but there's a one to one relation
- between them.
+ que podía ser puesto en distintos lugares en una jerarquía de menú.
+ Entonces, historicamente estan separados, pero existe realmente una relación
+ de uno a uno entre ellos.
 \end_layout
 
 \begin_layout Standard
-The 
+El 
 \family typewriter
 Loc[_]
 \family default
- takes a type parameter which defines a current value type for the 
+ recibe un parámetro de tipo, que define un valor actual para el 
 \family typewriter
 Loc
 \family default
 .
- For example, if the 
+ Por ejemplo, si el 
 \family typewriter
 Loc
 \family default
- refers to a page that will display a wiki page, then the type parameter
- of the 
+ referencia a una página que mostrara una página wiki, entonces el parámetro
+ de tipo del 
 \family typewriter
 Loc
 \family default
- would be 
+ será 
 \family typewriter
 WikiPage
 \family default
@@ -720,11 +745,11 @@ Loc[WikiPage]
 \end_layout
 
 \begin_layout Standard
-Each 
+Cada 
 \family typewriter
 Loc
 \family default
- can have many parameters (know as 
+ puede tener varios parámetros (conocidos como 
 \family typewriter
 LocParam
 \family default
@@ -736,29 +761,29 @@ loke param
 \begin_inset Quotes erd
 \end_inset
 
-) that define behavior for the 
+) que definen el comportamiento del 
 \family typewriter
 Loc[_]
 \family default
 .
- These parameters include access control testing, template definition, title,
- group, etc.
+ Estos parámetros incluyen acceso a las pruebas de control, definición de
+ plantillas, título, grupo, etc.
 \end_layout
 
 \begin_layout Subsection
-Access Control
+Control de Acceso
 \end_layout
 
 \begin_layout Standard
-You can control access to the URL/page represented by the 
+Se puede controlar el acceso a un URL/página representada por el 
 \family typewriter
 Loc
 \family default
- with the 
+ con el LocParam 
 \family typewriter
 If()
 \family default
- LocParam:
+:
 \end_layout
 
 \begin_layout Standard
@@ -773,12 +798,12 @@ status open
 
 \begin_layout Plain Layout
 
-   * Calculate if the page should be displayed.
+   * Calcula si la página debería ser mostrada.
 \end_layout
 
 \begin_layout Plain Layout
 
-   * In this case, it will be visible every other minute
+   * En este caso, será visible cada minuto
 \end_layout
 
 \begin_layout Plain Layout
@@ -841,19 +866,19 @@ LocParam
 \family typewriter
 Hidden
 \family default
- and 
+ y 
 \family typewriter
 Group
 \end_layout
 
 \begin_layout Standard
-Menu items can be hidden from the default menu hierarchy even if the page
- is accessible.
- The Hidden LocParam says 
+Los items de Menu, pueden ser ocultados de la jerarquia por defecto incluso
+ si la página es accesible.
+ El LocParam Hidden dice 
 \begin_inset Quotes eld
 \end_inset
 
-hide from default menu.
+oculta del menu por defecto.
 \begin_inset Quotes erd
 \end_inset
 
@@ -876,7 +901,8 @@ status open
 \end_layout
 
 \begin_layout Standard
-Menu items can also be grouped together in a named group and then displayed:
+Los items de Menu pueden ser tambien agrupados en grupos con nombre y despues
+ pueden ser visualizados:
 \end_layout
 
 \begin_layout Standard
@@ -896,7 +922,7 @@ status open
 \end_layout
 
 \begin_layout Standard
-Which results in:
+Que se traduce en:
 \end_layout
 
 \begin_layout Standard
@@ -921,7 +947,7 @@ Submenus
 \end_layout
 
 \begin_layout Standard
-You can nest menus:
+Se puede anidar menús:
 \end_layout
 
 \begin_layout Standard
@@ -931,7 +957,7 @@ status open
 
 \begin_layout Plain Layout
 
-      // A menu with submenus
+      // Un menú con submenús
 \end_layout
 
 \begin_layout Plain Layout
@@ -960,16 +986,17 @@ status open
 \end_layout
 
 \begin_layout Standard
-The About, Contact and Feedback pages are nested under the Info page.
+Las páginas About, Contact y Feedback estan anidadas dentro de la página
+ Infor.
 \end_layout
 
 \begin_layout Subsection
-Parameters
+Parámetros
 \end_layout
 
 \begin_layout Standard
-You can parse the incoming URL and extract parameters from it into type-safe
- variables:
+Se puede parsear la URL entrante y extraer parametros de ella en variables
+ de tipo seguro:
 \end_layout
 
 \begin_layout Standard
@@ -979,7 +1006,7 @@ status open
 
 \begin_layout Plain Layout
 
-// capture the page parameter information
+// captura la información de parámetros de la página
 \end_layout
 
 \begin_layout Plain Layout
@@ -993,7 +1020,7 @@ case class ParamInfo(theParam: String)
 
 \begin_layout Plain Layout
 
-  // Create a menu for /param/somedata
+  // Crea un menú para /param/somedata
 \end_layout
 
 \begin_layout Plain Layout
@@ -1017,7 +1044,7 @@ case class ParamInfo(theParam: String)
 \end_layout
 
 \begin_layout Standard
-The above code creates a menu called 
+El código anterior crea un menú llamado 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1026,36 +1053,36 @@ Param
 \end_inset
 
 .
- The menu is for the url 
+ El menú es para la url
 \family typewriter
-/param/xxx
+ /param/xxx
 \family default
- where 
+ donde 
 \family typewriter
 xxx
 \family default
- can match anything.
+ puede enparejar con cualquier cosa.
 \end_layout
 
 \begin_layout Standard
-When the URL 
+Cuando la URL 
 \family typewriter
 /param/dogfood
 \family default
- or 
+ o 
 \family typewriter
 /param/fruitbat
 \family default
- is presented, it matches the 
+ se presenta, empareja con el 
 \family typewriter
 Loc
 \family default
- and the function (
+ y la función (
 \family typewriter
 s => Full(ParamInfo(s))
 \family default
-) is invoked.
- If it returns a 
+) es invocada.
+ Si devuelve un 
 \family typewriter
 Full
 \family default
@@ -1063,28 +1090,25 @@ Full
 \family typewriter
 Box
 \family default
-, the value is placed in the 
+, el valor es colocado en el valor actual del 
 \family typewriter
 Loc
-\family default
-'s 
-\family typewriter
-currentValue
 \family default
 .
 \end_layout
 
 \begin_layout Standard
-It's possible to hand-write Loc implementation that will match many URL
- parameters.
+Es posible escribir a mano una implementación de Loc que emparejara con
+ muchos parámetros de URL.
 \end_layout
 
 \begin_layout Standard
-For information on accessing the captured parameters (in this case the 
+Para información sobre acceso a los parámetros capturados (en este caso
+ 
 \family typewriter
 ParamInfo
 \family default
-), see 
+), ver
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sub:Param-Example"
@@ -1095,17 +1119,17 @@ reference "sub:Param-Example"
 \end_layout
 
 \begin_layout Subsection
-Wildcards
+Comodines
 \end_layout
 
 \begin_layout Standard
-You can create menus that match all the contents of a given path.
- In this case, all the html files in 
+Se puede crear menús que emparejen todos los contenidos de un camino dado.
+ En este caso todos los archivos en 
 \family typewriter
 /static/
 \family default
- will be served.
- That includes 
+ serán servidos.
+ Eso incluye 
 \family typewriter
 /static/index
 \family default
@@ -1113,7 +1137,7 @@ You can create menus that match all the contents of a given path.
 \family typewriter
 /static/fruitbat
 \family default
-, and 
+, y 
 \family typewriter
 /static/moose/frog/wombat/meow
 \family default
@@ -1127,12 +1151,12 @@ status open
 
 \begin_layout Plain Layout
 
-      // more complex because this menu allows anything in the
+      // Más complejo por que este menú permite que cualquier cosa
 \end_layout
 
 \begin_layout Plain Layout
 
-      // /static path to be visible
+      // dentro de /static sea visible
 \end_layout
 
 \begin_layout Plain Layout
@@ -1146,16 +1170,8 @@ status open
 \end_layout
 
 \begin_layout Standard
-Note that Lift will not serve any files or directories that start with 
-\family typewriter
-.
-
-\family default
- (period) or 
-\family typewriter
-_
-\family default
- (underscore) or end with 
+Nota: Lift no servira ningún archivo o directorio que comience .
+ (punto) o _ guión bajo, o que terminen en 
 \family typewriter
 -hidden
 \family default
@@ -1163,58 +1179,59 @@ _
 \end_layout
 
 \begin_layout Subsection
-Summary
+Resumen
 \end_layout
 
 \begin_layout Standard
-We've demonstrated how to create a 
+Se ha demostrado como crear un 
 \family typewriter
 SiteMap
 \family default
- with many different kinds of menu items.
- Next, let's look at the views.
+ con diferentes tipos de items de menú.
+ A continuación se verá las vistas.
 \end_layout
 
 \begin_layout Section
-View First
+Primero la vista(View First)
 \end_layout
 
 \begin_layout Standard
-Once the access control is granted by SiteMap, Lift loads the view related
- to the URL.
- There are many mechanisms that Lift uses to resolve a path to a view, but
- the simplest is a one to one mapping between the URL path and the files
- in 
+Una vez que el control de acceso es otorgado por el SiteMap, Lift carga
+ las vistas relaciondas con la URL.
+ Existen varios mecanismos que Lift usa para resolver el camino a una vista,
+ pero el más simple es un mapeo uno a uno entre la URL y los archivos que
+ estan dentro de 
 \family typewriter
 /src/main/webapp
 \family default
 .
- If the URL is 
+ Si la URL es 
 \family typewriter
 /index
 \family default
-, then Lift will look for the localized (see 
+, entonces Lift buscará la versión localizada (see 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sec:Localization"
 
 \end_inset
 
-) version of 
+) de 
 \family typewriter
 /src/main/webapp/index.html
 \family default
 .
- Once Lift loads the template, Lift processes it to transform it into the
- dynamic content you want to return in response to the URL input.
+ Una vez que Lift carga la plantilla, Lift la procesa y la transforma en
+ el contenido dinámico que se quiere devolver en la respuesta a la URL de
+ entrada.
 \end_layout
 
 \begin_layout Subsection
-Page source
+Código fuente de la página
 \end_layout
 
 \begin_layout Standard
-Let's look at the page source:
+Se muestra a continuación el código fuente de la página:
 \end_layout
 
 \begin_layout Standard
@@ -1229,7 +1246,7 @@ lstparams "caption={index.html},language=xml"
 \end_layout
 
 \begin_layout Standard
-We can open the page in our browser:
+Se puede abrir la página en un navegador:
 \end_layout
 
 \begin_layout Standard
@@ -1242,42 +1259,43 @@ We can open the page in our browser:
 \end_layout
 
 \begin_layout Subsection
-Dynamic content
+Contenido dinámico
 \end_layout
 
 \begin_layout Standard
-The template is a legal HTML page.
- But there are marker in the page to tell Lift how to interpret the HTML.
+La plantilla es una página HTML legal(válida).
+ Pero existe un marcador en la página para decirle a Lift como interpretar
+ el HTML.
 \end_layout
 
 \begin_layout Standard
-If the 
+Si la etiqueta 
 \family typewriter
 <body>
 \family default
- tag contains a 
+ contiene un atributo 
 \family typewriter
 class
 \family default
- attribute 
+ 
 \family typewriter
 lift:content_id=xxxx
 \family default
-, then Lift will find the element with the matching 
+, entonces Lift buscará el elemento que empareja con el 
 \family typewriter
 id
 \family default
- and use that as the starting point for rendering the page.
- This allows your designers to edit and maintain the pages in the same hierarchy
- that you use for your application.
+ y lo usará como punto de referencia de inicio para renderizar la página.
+ Esto permite a los diseñadores editar y mantener las páginas en la misma
+ estructura de directorios que los desarrolladores usan para la aplicación.
 \end_layout
 
 \begin_layout Subsection
-Surround and page chrome
+Surround y page chrome
 \end_layout
 
 \begin_layout Standard
-The template processing starts with:
+El procesamiento de plantillas comienza con:
 \end_layout
 
 \begin_layout Standard
@@ -1297,20 +1315,23 @@ status open
 \end_layout
 
 \begin_layout Standard
-The 
+El atributo 
 \family typewriter
 class
 \family default
- attribute 
+ 
 \family typewriter
 lift:surround?with=default;at=content
 \family default
- instructs Lift to surround the current Element with the template named
- default.html (typically located in the 
+ instruye a Lift rodear el elemento actual con la plantilla llamada default.html
+ (típicamente ubicada en el direcotrio 
 \family typewriter
 /templates-hidden/
 \family default
- directory), and place the current page's content at the element with the
+), y colocar el contenido de la página actual en el elemento con 
+\family typewriter
+id
+\family default
  
 \begin_inset Quotes eld
 \end_inset
@@ -1319,31 +1340,28 @@ content
 \begin_inset Quotes erd
 \end_inset
 
- 
-\family typewriter
-id
-\family default
 .
 \end_layout
 
 \begin_layout Standard
-This pattern allows us to wrap a common chrome around every page on our
- site.
- You can also specify different template to use for surrounding.
- Further, the template itself can choose different templates to use for
- surrounding.
+Este patrón nos permite envolver conun cromo en común cada página de nuestro
+ sitio.
+ Se puede también especificar una plantilla diferente con la cual envolver
+ las páginas.
+ Adicionalmente, la plantilla misma puede seleccionar diferentes plantillas
+ para envolver su contenido.
 \end_layout
 
 \begin_layout Subsection
-Embed
+Incrustar
 \end_layout
 
 \begin_layout Standard
-In addition to surrounding the page with chrome, you can also embed another
- file.
- For example, you could have a shopping cart component that is embedded
- in certain pages.
- We embed with:
+Adicionalmente a envolver una página con un cromo, se puede incrustar también
+ otro archivo.
+ Por ejemplo, se puede tener un componente de carrito de compras que se
+ incrusta en ciertas páginas.
+ Se incrusta de la siguiente forma:
 \end_layout
 
 \begin_layout Standard
@@ -1359,7 +1377,7 @@ status open
 
 \begin_layout Plain Layout
 
-  replaced with embedded content
+  Reemplazado con el contenido incrustado
 \end_layout
 
 \begin_layout Plain Layout
@@ -1373,16 +1391,16 @@ status open
 \end_layout
 
 \begin_layout Standard
-Once again, the command is signalled with a 
+Una vez más, el comando es señalado con un atributo 
 \family typewriter
 class
 \family default
- attribute that starts with 
+ que comienza con 
 \family typewriter
 lift:
 \family default
 .
- In this case, we embed a template from the file 
+ En este caso se incustró una plantilla desde el archivo 
 \family typewriter
 _embedme.html
 \family default
@@ -1390,11 +1408,11 @@ _embedme.html
 \end_layout
 
 \begin_layout Subsection
-Results
+Resultados
 \end_layout
 
 \begin_layout Standard
-The resulting dynamically generated page looks like:
+La página generadad dinámicamente resultante se parece a:
 \end_layout
 
 \begin_layout Standard
@@ -1408,116 +1426,113 @@ The resulting dynamically generated page looks like:
 \end_layout
 
 \begin_layout Section
-Snippets and Dynamic content
+Snippets y el contenido dinámico
 \end_layout
 
 \begin_layout Standard
-Lift templates contain no executable code.
- They are pure, raw, valid HTML.
+Las plantillas en Lift no contienen código ejecutable.
+ Son HTML válido puro.
 \end_layout
 
 \begin_layout Standard
-Lift uses snippets to transform sections of the HTML page from static to
- dynamic.
- The key word is transform.
+Lift usa snippets para transformar las secciones de una página HTML de estáticos
+ a dinámicos.
 \end_layout
 
 \begin_layout Standard
-Lift's snippets are Scala functions: 
+Los snippets de Lift son funciones Scala, de tipo: 
 \family typewriter
 NodeSeq => NodeSeq
 \family default
 .
- A 
+ Un 
 \family typewriter
 NodeSeq
 \family default
- is a collection of XML nodes.
- An snippet can only transform input 
+ es una colección de nodos XML.
+ Un snippet solamente puede transformar una entrada 
 \family typewriter
 NodeSeq
 \family default
- to output 
+ a una salida 
 \family typewriter
 NodeSeq
 \family default
 .
- Well, not exactly...
- a snippet may also have side effects including setting cookies, doing database
- transactions, etc.
- But the core transformation concept is important.
- First, it isolates snippet functionality to discrete parts of the page.
- This means that each snippet, each 
+ Bueno, no exactamente...
+ un snippet puede tambien tener efectos secundarios esto incluye establecer
+ cookies, transacciones de la base de datos, etc.
+ Esto significa que cada snippet, cada 
 \family typewriter
 NodeSeq => NodeSeq
 \family default
-, is a component.
- Second, it means that pages are recursively built, but remain as valid
- HTML at all times.
- This means that the developer has to work hard to introduce a cross site
- scripting vulnerability.
- Third, the designers don't have to worry about learning to program anything
- in order to design HTML pages because the program execution is abstracted
- away from the HTML rather than embedded in the HTML.
+, es un componente.
+ Segundo, signfica que las páginas son construidas recursivamente, pero
+ permanecen como HTML válido siempre.
+ Esto significa que el desarrollador tiene que trabajar mucho para introducir
+ una vulnerabilidad cross site scripting.
+ Tercero, los diseñadores no tienen que preocuparse por programar algo,
+ para diseñar las páginas HTML, debido a que la ejecución del programa es
+ abstraida fuera del HTML en lugar de incrustarla dentro del HTML.
 \end_layout
 
 \begin_layout Subsection
-Snippets in markup
+Snippets y marcado(markup)
 \end_layout
 
 \begin_layout Standard
-In order to indicate that content is dynamic, the markup contains a snippet
- invocation.
- That typically takes the form 
+En orden de indicar que el contenido es dinámico, el marcado cotiene una
+ invocación a un snippet.
+ Que típicamente tiene la forma de
 \family typewriter
-class="someclass someothercss lift:mysnippet"
+ class="someclass someothercss lift:mysnippet"
 \family default
 .
- If a class attribute contains 
+ Si un atributo class contiene 
 \family typewriter
 lift:xxx
 \family default
-, the 
+, el 
 \family typewriter
-xxx
+xxx 
 \family default
- will be resolved to a snippet.
- The snippet may take attributes.
- Attributes are encoded like URL parameters...
- offset by a 
-\family typewriter
-?
-\family default
- (question mark), then 
-\family typewriter
-name=value
-\family default
-, separted by 
+será resuelto a un snippet.
+ El snippet puede recibir atributos.
+ Los atributos pueden ser codificados como se codifican los parámetros URL...
+ precedidos de un 
 \family typewriter
 ?
 \family default
- (question mark), 
+ (signo de interrogación), y luego 
+\family typewriter
+nombre=
+\family default
+valor, separado por 
+\family typewriter
+?
+\family default
+ (signo de interrogación), 
 \family typewriter
 ;
 \family default
- (semicolon) or 
+ (punto y coma) o 
 \family typewriter
 &
 \family default
  (ampersand).
  
 \family typewriter
-name
+nombre
 \family default
- and 
+ y 
 \family typewriter
-value
+valor
 \family default
- are URL encoded.
+ son URL codificada.
 \end_layout
 
 \begin_layout Standard
-You may also invoke snippets with XML tags:
+Se puede invocar snippets mediante etiquetas XML:
 \end_layout
 
 \begin_layout Standard
@@ -1547,11 +1562,12 @@ status open
 \end_layout
 
 \begin_layout Standard
-Note that the Html5 parser will force all tags to lower case so 
+Nota, el parser Html5 obligará a que todas las etiquetas sean minúsculas
+ por lo que 
 \family typewriter
 <lift:MySnipet>
 \family default
- will become 
+ se convertirá en 
 \family typewriter
 <lift:mysnippet>
 \family default
@@ -1559,7 +1575,7 @@ Note that the Html5 parser will force all tags to lower case so
 \end_layout
 
 \begin_layout Standard
-Lift 2.3 will also allow snippet invocation in the form 
+En Lift 2.3 se permitirá también otra forma de invocación 
 \family typewriter
 <div l="mysnippet?param=value">xxx</div>
 \family default
@@ -1567,17 +1583,17 @@ Lift 2.3 will also allow snippet invocation in the form
 \end_layout
 
 \begin_layout Standard
-The latter two mechanisms for invoking snippets will not result in valid
- Html5 templates.
+Los dos últimos mecanismos para invocar snippets no serán plantillas Html5
+ válidas.
 \end_layout
 
 \begin_layout Subsection
-Snippet resolution
+Resolución de snippets
 \end_layout
 
 \begin_layout Standard
-Lift has a very complex set of rules to resolve from snippet name to NodeSeq
- => NodeSeq (see 
+En Lift se tiene un sistema muy complejo para resolver de un nombre de snippet
+ a un NodeSeq => NodeSeq (ver 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sec:Snippet-Resolution"
@@ -1585,35 +1601,35 @@ reference "sec:Snippet-Resolution"
 \end_inset
 
 ).
- For now, the simplest mechanism is to have a 
+ Por ahora, el mecanismo más simple es tener una 
 \family typewriter
-class
+clase
 \family default
- or 
+ u 
 \family typewriter
-object
+objeto
 \family default
- in the 
+ en el paquete 
 \family typewriter
 snippet
 \family default
- package that matches the snippet name.
+ que empareje con el nombre del snippet.
 \end_layout
 
 \begin_layout Standard
-So 
+Entonces 
 \family typewriter
 lift:HelloWorld
 \family default
- will look for the 
+ buscará la clase 
 \family typewriter
 code.snippet.HelloWorld
 \family default
- class and invoke the 
+ e invocará el método 
 \family typewriter
 render
 \family default
- method.
+.
 \end_layout
 
 \begin_layout Standard
@@ -1621,27 +1637,27 @@ render
 \family typewriter
 lift:CatFood.fruitbat
 \family default
- will look for the 
+ buscará la clase 
 \family typewriter
 code.snippet.CatFood
 \family default
- class and invoke the 
+ e invocará el método 
 \family typewriter
 fruitbat
 \family default
- method.
+.
 \end_layout
 
 \begin_layout Subsection
-Dynamic Example
+Ejemplo dinámico (Dynamic Example)
 \end_layout
 
 \begin_layout Standard
-Let's look at the 
+Se ve a continuación la página 
 \family typewriter
 dynamic.html
 \family default
- page:
+:
 \end_layout
 
 \begin_layout Standard
@@ -1656,11 +1672,11 @@ lstparams "caption={dynamic.html},language=xml"
 \end_layout
 
 \begin_layout Standard
-This template invokes the 
+Esta plantilla invoca al snippet 
 \family typewriter
 HelloWorld
 \family default
- snippet defined in 
+ definido en 
 \family typewriter
 HelloWorld.scala
 \family default
@@ -1679,7 +1695,7 @@ lstparams "caption={HelloWorld.scala}"
 \end_layout
 
 \begin_layout Standard
-And the dynamic content becomes:
+Y el contenido dinámico se convierte en:
 \end_layout
 
 \begin_layout Standard
@@ -1699,11 +1715,11 @@ status open
 \end_layout
 
 \begin_layout Standard
-The 
+El código del snippet 
 \family typewriter
 HelloWorld
 \family default
- snippet code is simple.
+ es simple.
 \end_layout
 
 \begin_layout Standard
@@ -1722,22 +1738,22 @@ lazy val date: Box[Date] = DependencyFactory.inject[Date]
 \end_layout
 
 \begin_layout Standard
-Uses dependency injection (see 
+Usa inyección de dependencia (dependency injection) (ver 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sec:Dependency-Injection"
 
 \end_inset
 
-) to get a 
+) para obtener una instancia de 
 \family typewriter
 Date
 \family default
- instance.
+.
 \end_layout
 
 \begin_layout Standard
-Then:
+Entonces:
 \end_layout
 
 \begin_layout Standard
@@ -1756,34 +1772,34 @@ def render = "* *" #> date.map(_.toString)
 \end_layout
 
 \begin_layout Standard
-Creates a CSS Selector Transform (see 
+Crea un Selector de Transformación CSS (ver 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sec:CSS-Selector-Transforms"
 
 \end_inset
 
-) that inserts the 
+) que inserta un valor del tipo 
 \family typewriter
 String
 \family default
- value of the injected 
+ de la fecha inyectada (
 \family typewriter
-Date
+Date)
 \family default
- into the markup, in this case the 
+ en el marcado, en este caso el 
 \family typewriter
 <span>
 \family default
- that invoked the snippet.
+ que invocó al snippet.
 \end_layout
 
 \begin_layout Subsection
-Embedded Example
+Ejemplo Incustrado (Embedded Example)
 \end_layout
 
 \begin_layout Standard
-We've seen how we can embed a template using: 
+Se ha visto como se puede incrustrar una plantilla usando: 
 \family typewriter
 <div class="lift:embed?what=_embedme">xxx</div>
 \family default
@@ -1791,11 +1807,11 @@ We've seen how we can embed a template using:
 \end_layout
 
 \begin_layout Standard
-Let's look at the 
+Se ve a continuación la plantilla 
 \family typewriter
 _embedme.html
 \family default
- template:
+:
 \end_layout
 
 \begin_layout Standard
@@ -1810,11 +1826,11 @@ lstparams "language=xml"
 \end_layout
 
 \begin_layout Standard
-And the invoked 
+Y el programa 
 \family typewriter
 Embedded.scala
 \family default
- program:
+ invocado:
 \end_layout
 
 \begin_layout Standard
@@ -1829,29 +1845,29 @@ lstparams "caption={Embedded.scala}"
 \end_layout
 
 \begin_layout Standard
-The template invokes the 
+La plantilla invoca el método 
 \family typewriter
 from
 \family default
- method on the 
+ en el snippet 
 \family typewriter
 Embedded
 \family default
- snippet.
- In this case, the snippet is an 
+.
+ En este caso el snippet es un 
 \family typewriter
-object
+objeto
 \family default
- singleton because it does not take any constructor parameters and has no
- instance variabled.
+ singleton porque no contiene ningún parámetro de construcción y no tiene
+ variable de instancia.
 \end_layout
 
 \begin_layout Standard
-The 
+El método 
 \family typewriter
 from
 \family default
- method:
+:
 \end_layout
 
 \begin_layout Standard
@@ -1870,15 +1886,16 @@ status open
 \end_layout
 
 \begin_layout Standard
-Creates a CSS Selector Transform that replaces the contents with the 
+Crea un Selector de Transformación CSS que reemplaza los contenidos del
+ 
 \family typewriter
 name
 \family default
- of the current 
+ del 
 \family typewriter
 location
 \family default
-.
+ actual.
 \end_layout
 
 \begin_layout Subsection
@@ -1888,20 +1905,20 @@ name "sub:Param-Example"
 
 \end_inset
 
-Param Example
+Ejemplo Param (Param Example)
 \end_layout
 
 \begin_layout Standard
-Above, we saw how to create a 
+Arriba se ha visto como crear un 
 \family typewriter
 Loc[ParamInfo]
 \family default
- to capture URL parameters.
- Let's look at the 
+ para capturar los parámetros del URL.
+ Si se ve la página 
 \family typewriter
 /param/xxx
 \family default
- page and see how we can access the parameters:
+ y se ve como se puede acceder a los parámetros:
 \end_layout
 
 \begin_layout Standard
@@ -1916,11 +1933,11 @@ lstparams "caption={param.html},language=xml"
 \end_layout
 
 \begin_layout Standard
-And let's look at two different snippets that can access the 
+Se ve a continuación dos snippets diferentes que pueden acceder a 
 \family typewriter
 ParamInfo
 \family default
- for the page:
+ para la página:
 \end_layout
 
 \begin_layout Standard
@@ -1935,100 +1952,93 @@ lstparams "caption={Param.scala}"
 \end_layout
 
 \begin_layout Standard
-Each snippet has a 
+Cada snippet tiene un método 
 \family typewriter
 render
 \family default
- method.
- However, the 
+.
+ Sin embargo, la clase 
 \family typewriter
 ShowParam
 \family default
- class takes a constructor parameter which contains the 
+ toma un constructor de parámetro que contiene el 
 \family typewriter
 ParamInfo
 \family default
- from the current 
+ para el 
 \family typewriter
 Loc[_]
 \family default
-.
- If the current 
+ actual.
+ Si el 
 \family typewriter
 Loc
 \family default
- does not have the type parameter 
+ actual no tiene un parámetro de tipo 
 \family typewriter
 ParamInfo
 \family default
-, no instance of 
+, no se creará ninguna instancia de 
 \family typewriter
 ShowParam
 \family default
- would be created and the snippet could not be resolved.
- But we do have a Loc[ParamInfo], so Lift constructs a 
+ y el snippet no podrá ser resuelto.
+ Pero si se tiene un Loc[ParamInfo], asi que Lift construye un 
 \family typewriter
 ShowParam
 \family default
- with the 
+ con el valor actual del 
 \family typewriter
 Loc
 \family default
-'s 
-\family typewriter
-currentValue
-\family default
- and then the 
+ y luego el método 
 \family typewriter
 render
 \family default
- method is invoked and it returns a CSS Selector Transform which is a 
+ es invocado y devuelve un Selector de Transformación CSS que es un
 \family typewriter
-NodeSeq => NodeSeq
+ NodeSeq => NodeSeq
 \family default
 .
 \end_layout
 
 \begin_layout Standard
-The 
+El método 
 \family typewriter
-object Param
+render del
 \family default
-'s 
+ 
 \family typewriter
-render
+objeto Param
 \family default
- method accesses the 
+ accede al 
 \family typewriter
 Loc[ParamInfo]
 \family default
- directly.
- The 
+ directamente.
+ El método 
 \family typewriter
 render
 \family default
- method gets the 
+ obtiene el valro actual del 
 \family typewriter
 Loc
 \family default
-'s 
-\family typewriter
-currentValue
-\family default
- and uses that to calculate the return value, the CSS Selector Transform.
+ y lo usa para calcular el valor a devolver, el Selector de Transformación
+ CSS.
 \end_layout
 
 \begin_layout Subsection
-Recursive
+Recursivo
 \end_layout
 
 \begin_layout Standard
-Lift's snippets are evaluated lazily.
- This means that the body of the snippet is not executed until the outer
- snippet is executed which allows you to return markup from a snippet that
- itself contains a snippet or alternatively, choose part of the snippet
- body that itself contains a snippet invocation.
- For example, in this markup:
+Los snippets en Lift son evaluados perezosamente.
+ Esto quiere decir que el cuerpo del snippet no es ejecutado hasta que el
+ snippet exterior es ejecutado, lo que permite devolver marcado de un snippet
+ que a su vez contiene otro snippet o alternativamente, seleccionar una
+ parte del cuerpo del snippet que en si contiene una invocación a un snippet.
+ Por ejemplo:
 \end_layout
 
 \begin_layout Standard
@@ -2043,16 +2053,16 @@ lstparams "caption={recurse.html},language=xml"
 \end_layout
 
 \begin_layout Standard
-The 
+El snippet 
 \family typewriter
 Recurse
 \family default
- snippet chooses one of both of the 
+ selecciona uno de los dos 
 \family typewriter
 <div>
 \family default
-'s, each of which invokes a snippet themselves.
- Here's the Scala:
+'s, cada uno de los cuales invoca a un snippet por si mismo.
+ A continuación el archivo Scala:
 \end_layout
 
 \begin_layout Standard
@@ -2067,32 +2077,32 @@ lstparams "caption={Recurse.scala}"
 \end_layout
 
 \begin_layout Standard
-Depending on the value of 
+Dependiendo el valor de 
 \family typewriter
 which
 \family default
-, one or both parts of the markup will be chosen.
- And each part of the markup itself invokes a snippet which displays a notice
- and passes the markup through.
+, uno o las dos partes del marcado seran seleccionadas.
+ Y cada parte del amrcado ensi invocará a un snippet que mostrará un mensaje
+ y pasará el marcado.
 \end_layout
 
 \begin_layout Standard
-Using this technique, you can have a snippet that chooses one or many different
- snippets or returns a 
+Usando esta técnica, se puede tener un snippet que selecciona uno o muchos
+ snippets o que devuelve un snippet 
 \family typewriter
 lift:embed
 \family default
- snippet, thus allowing for very dynamic markup generation.
+, lo que permite una generación muy dinámica de marcado.
 \end_layout
 
 \begin_layout Subsection
-Summary
+Resumen
 \end_layout
 
 \begin_layout Standard
-We've seen some simple examples of Lift's snippet mechanism used to generate
- dynamic content.
- You can read more on snippets (see 
+Se ha visto algunos ejemplos de los mecanismos que Lift usa para generar
+ contenido dinámico.
+ Se puede leer más sobre snippets (ver 
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "sec:Snippets"
@@ -2103,27 +2113,31 @@ reference "sec:Snippets"
 \end_layout
 
 \begin_layout Section
-Wrap up
+Envolver (Wrap up)
 \end_layout
 
 \begin_layout Standard
-In this chapter, we've seen how to define application behavior on 
+En este capítulo, se ha visto como definir el comportamiento de la aplicación
+ en 
 \family typewriter
 Boot.scala
 \family default
 .
- We've explored Lift's 
+ Hemos explorado el 
 \family typewriter
 SiteMap
 \family default
- which is used to generate navigation and enforce access control.
- We've seen how Lift's templating system works (well, there are actually
- a bunch of different ways to template in Lift, but we've explored to most
- common mechanism.) We've seen how snippets work.
+ de Lift que es usado para generar navegación y que hace cumplir el control
+ de acceso.
+ Se ha visto como el sistemade plantillas de Lift trabaja (bueno, existen
+ un montón de maneras de manejar plantillas en Lift, pero se ha explorado
+ el mecanismo más común).
+ Se ha visto como es que los snippets trabajan.
 \end_layout
 
 \begin_layout Standard
-In the next chapter, we'll take a dive into Lift's form handling.
+En el siguiente capítulo, se sumergirá en la manipulación de formularios
+ en Lift.
 \end_layout
 
 \end_body
