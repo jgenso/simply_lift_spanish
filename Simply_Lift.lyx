@@ -1059,7 +1059,7 @@ reference "sec:Type-safety"
 \end_inset
 
 ), Lift sabe como diferenciar entre una Cadena que tiene que estar codificada
- como HTML y un elemento HTML que ya esta correctamente codificada.
+ como HTML y un elemento HTML que ya esta correctamente codificado.
  Por defecto, las aplicaciones Lift son resistentes a muchas de las vulnerabilid
 ades top 10 de OWASP (ver 
 \begin_inset CommandInset ref
@@ -1073,8 +1073,8 @@ reference "sec:Security"
 
 \begin_layout Standard
 Este ejemplo muestra muchas de las fortalezas de Lift.
- Apliemos la aplicación y se verá como las fortalezas de Lift contiuan soportand
-o el desarrollo de nuestra aplicación.
+ Ampliemos la aplicación y se verá como las fortalezas de Lift contiuan
+ soportando el desarrollo de nuestra aplicación.
 \end_layout
 
 \begin_layout Standard
