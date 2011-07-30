@@ -12,29 +12,29 @@ import Loc._
 import code.snippet._
 
 /**
- * A class that's instantiated early and run.  It allows the application
- * to modify lift's environment
+ * Una clase que es instanciada tempranamente y luego ejecutada. Permite que la aplicación 
+ * modifique el entorno de Lift
  */
 class Boot {
   /**
-   * Calculate if the page should be displayed.
-   * In this case, it will be visible every other minute
+   * Calcula si la página debe ser mostrada.
+   * En este caso, será visible cada minuto
    */
   def displaySometimes_? : Boolean = 
     (millis / 1000L / 60L) % 2 == 0
 
   def boot {
-    // where to search snippet
+    // Donde se debe buscar el snippet
     LiftRules.addToPackages("code")
 
-    // Build SiteMap
+    // Construye el SiteMap
     def sitemap(): SiteMap = SiteMap(
-      Menu.i("Home") / "index", // the simple way to declare a menu
+      Menu.i("Home") / "index", // La manera más simple de declarar un menú
 
       Menu.i("Sometimes") / "sometimes" >> If(displaySometimes_? _,
                                             S ? "Can't view now"), 
 
-      // A menu with submenus
+      // Un menú con submenús
       Menu.i("Info") / "info" submenus(
         Menu.i("About") / "about" >> Hidden >> LocGroup("bottom"),
         Menu.i("Contact") / "contact",
@@ -44,7 +44,7 @@ class Boot {
 
       Menu.i("Sitemap") / "sitemap" >> Hidden >> LocGroup("bottom"),
 
-      Menu.i("Dynamic") / "dynamic", // a page with dynamic content
+      Menu.i("Dynamic") / "dynamic", // una página con contenido dinámico
 
       Param.menu,
 
@@ -55,26 +55,26 @@ class Boot {
                          case _ => Empty},
                         w => w.toString) / "recurse",
       
-      // more complex because this menu allows anything in the
-      // /static path to be visible
+      // Más complejo, pues permite que cualquier cosa que se encuentre dentro del directorio
+      // /static sea visible
       Menu.i("Static") / "static" / **)
 
-    // set the sitemap.  Note if you don't want access control for
-    // each page, just comment this line out.
+    // Establece el sitemap. Nota si no se quiere control de acceso para
+    // cada página, solo comenta la linea a continuación.
     LiftRules.setSiteMapFunc(() => sitemap())
 
-    //Show the spinny image when an Ajax call starts
+    //Muestra la imágen giratoria cuando una llamada Ajax se inicia
     LiftRules.ajaxStart =
       Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
     
-    // Make the spinny image go away when it ends
+    // Hace que la imágen giratoria desaparezca cuando la llamada Ajax termina
     LiftRules.ajaxEnd =
       Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
 
-    // Force the request to be UTF-8
+    // Obliga que la solicitud sea UTF-8
     LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
 
-    // Use HTML5 for rendering
+    // Usa HTML5 para el renderizado
     LiftRules.htmlProperties.default.set((r: Req) =>
       new Html5Properties(r.userAgent))    
   }

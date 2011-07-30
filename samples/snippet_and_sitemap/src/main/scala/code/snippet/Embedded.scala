@@ -10,7 +10,7 @@ import common._
 import java.util.Date
 
 /**
- * A snippet that lists the name of the current page
+ * Un snippet que lista el nombre de la página actual
  */
 object Embedded {
   def from = "*" #> S.location.map(_.name)
