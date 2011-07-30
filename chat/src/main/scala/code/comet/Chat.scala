@@ -7,33 +7,33 @@ import util._
 import Helpers._
 
 /**
- * The screen real estate on the browser will be represented
- * by this component.  When the component changes on the server
- * the changes are automatically reflected in the browser.
+ * El estado real de la pantalla será representado por mediante
+ * este componente. Cuando el componente cambia en el servidor
+ * los cambios son reflejados automáticamente en el navegador.
  */
 class Chat extends CometActor with CometListener {
-  private var msgs: Vector[String] = Vector() // private state
+  private var msgs: Vector[String] = Vector() // estado privado
 
   /**
-   * When the component is instantiated, register as
-   * a listener with the ChatServer
+   * Cuando se instancia el componente, se registra como
+   * un oyente en el ChatServer
    */
   def registerWith = ChatServer
 
   /**
-   * The CometActor is an Actor, so it processes messages.
-   * In this case, we're listening for Vector[String],
-   * and when we get one, update our private state
-   * and reRender() the component.  reRender() will
-   * cause changes to be sent to the browser.
+   * El CometActor es un Actor, por lo que procesa mensajes.
+   * En este caso, se está oyendo por un Vector[String],
+   * y cuando se obtiene uno, se actualiza el estado privado
+   * y se re-renderiza el componente.  reRender() hará
+   * que los cambios sean enviados al navegador.
    */
   override def lowPriority = {
     case v: Vector[String] => msgs = v; reRender()
   }
 
   /**
-   * Put the messages in the li elements and clear
-   * any elements that have the clearable class.
+   * Se pone los mensajes en los elementos li y se limpia
+   * cualquier elemento que tenga la clase clearable.
    */
   def render = "li *" #> msgs & ClearClearable
 }

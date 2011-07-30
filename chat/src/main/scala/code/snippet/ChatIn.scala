@@ -10,24 +10,24 @@ import JE._
 import comet.ChatServer
 
 /**
- * A snippet transforms input to output... it transforms
- * templates to dynamic content.  Lift's templates can invoke
- * snippets and the snippets are resolved in many different
- * ways including "by convention".  The snippet package
- * has named snippets and those snippets can be classes
- * that are instantiated when invoked or they can be
- * objects, singletons.  Singletons are useful if there's
- * no explicit state managed in the snippet.
+ * Un snippet que transforma una entrada en una salida... transforma
+ * plantillas en contenido dinámico. Las plantillas en Lift pueden invocar
+ * snippets y los snippets se resuelven de muchas formas
+ * incluyendo "por convención".  El paquete snippet
+ * has tiene snippets con nombre y esos snippets pueden ser clases 
+ * que son instanciadas cuando se las invoca o pueden ser 
+ * objectos, singletons.  Los singletos son utiles si es que
+ * no existe manejo explícito de estado en el snippet.
  */
 object ChatIn {
 
   /**
-   * The render method in this case returns a function
-   * that transforms NodeSeq => NodeSeq.  In this case,
-   * the function transforms a form input element by attaching
-   * behavior to the input.  The behavior is to send a message
-   * to the ChatServer and then returns JavaScript which
-   * clears the input.
+   * El método render en este caso devuelve una función
+   * que transforma NodeSeq => NodeSeq.  En este caso,
+   * la función transforma, un elemento de entrada de formulario
+   * añadiendole un comportamiento. El comportamiento consiste en enviar un mensaje
+   * al ChatServer y devolver un JavaScript que limpia el elemento de 
+   * entrada.
    */
   def render = SHtml.onSubmit(s => {
     ChatServer ! s

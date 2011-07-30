@@ -6,26 +6,26 @@ import http._
 import actor._
 
 /**
- * A singleton that provides chat features to all clients.
- * It's an Actor so it's thread-safe because only one
- * message will be processed at once.
+ * Un Singleton que provee características de chat a todos los clientes.
+ * Es un Actor, por lo que es seguro en cuanto a sub procesos
+ * solo se procesará un mensaje a la vez.
  */
 object ChatServer extends LiftActor with ListenerManager {
   private var msgs = Vector("Welcome") // private state
 
   /**
-   * When we update the listeners, what message do we send?
-   * We send the msgs, which is an immutable data structure,
-   * so it can be shared with lots of threads without any
-   * danger or locking.
+   * Cuando se actualiza a los oyentes, ¿Qué mensaje enviamos?
+   * Enviamos los mensajes, que es una estructura de datos inmutable,
+   * por lo que puede ser compartida por un montón de hilos sin ningún
+   * peligro de que ocurra un bloqueo.
    */
   def createUpdate = msgs
 
   /**
-   * process messages that are sent to the Actor.  In
-   * this case, we're looking for Strings that are sent
-   * to the ChatServer.  We append them to our Vector of
-   * messages, and then update all the listeners.
+   * procesa los mensajes que son enviados al Actor. En
+   * este caso, se busca cadenas que son enviadas al
+   * ChatServer.  Se las agrega al Vector de 
+   * mensajes, y despues se actualiza todos los oyentes.
    */
   override def lowPriority = {
     case s: String => msgs :+= s; updateListeners()
