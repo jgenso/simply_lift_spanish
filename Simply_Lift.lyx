@@ -160,7 +160,7 @@ Copyright © 2010-2011 by David Pollak
 \begin_inset Newline newline
 \end_inset
 
-This document is licensed Creative Commons Attribution, Non Commercial,
+Este documento esta licenciado con Creative Commons Attribution, Non Commercial,
  No Derivatives: 
 \begin_inset Flex URL
 status open
@@ -225,36 +225,38 @@ mainmatter
 \end_layout
 
 \begin_layout Part
-The Lift Web Framework
+El Framework Lift Web
 \end_layout
 
 \begin_layout Chapter
-Introduction
+Introducción
 \end_layout
 
 \begin_layout Standard
-The Lift Web Framework provides web application developers tools to make
- writing security, interacting, scalable web applications easier than with
- any other web framework.
- After reading Part I of this book, you should understand Lift's core concepts
- and be able to write Lift applications.
- But with anything, practice is important.
- I have been writing Lift and Scala for 4 years, and even I learn new things
- about the language and the framework on a weekly basis.
- Please consider Lift an path and an exploration, rather than an end point.
+El Framework Lift Web provee a desarrolladores de aplicaciones web herramientas
+ para escribir aplicaciones web seguras, escalables, e interactivas más
+ facil que con cualquier otro framework web.
+ Después de leer la Parte I de este libro, debería ser posible entender
+ los conceptos fundamentales de Lift y ser capaz de escribir aplicaciones
+ Lift.
+ Pero como en todo, la práctica es importante.
+ He escrito Lift y Scala por 4 años, y aún aprendo cosas nuevas sobre el
+ lenguaje y el framework cada semana.
+ Por favor considere Lift como un camino y exploración, en lugar de, un
+ punto final.
 \end_layout
 
 \begin_layout Standard
 \begin_inset Quotes eld
 \end_inset
 
-Yo, David, stop yer yappin'.
- I'm coming from Rails|Spring|Struts|Django and I want to get started super
- fast with Lift.
+Ho, David, deja de parlotear'.
+ Vengo de Rails|Spring|Struts|Django y quiero comenzar super rapido con
+ Lift.
 \begin_inset Quotes erd
 \end_inset
 
- See From MVC (
+ Ver MVC (
 \begin_inset CommandInset ref
 LatexCommand vref
 reference "cha:From-MVC"
@@ -265,7 +267,7 @@ reference "cha:From-MVC"
 \end_layout
 
 \begin_layout Standard
-Lift is built on top of the 
+Lift está construido sobre el lenguaje de programación 
 \begin_inset CommandInset href
 LatexCommand href
 name "Scala"
@@ -273,8 +275,8 @@ target "http://scala-lang.org"
 
 \end_inset
 
- programming language.
- Scala runs on the 
+ .
+ Scala se ejecuta sobre la Máquina Virtual de Java (
 \begin_inset CommandInset href
 LatexCommand href
 name "Java Virtual Machine"
@@ -282,8 +284,8 @@ target "http://www.oracle.com/technetwork/java/index.html"
 
 \end_inset
 
-.
- Lift applications are typically packaged as 
+).
+ Las aplicaciones Lift son típicamente empaquetadas como archivos 
 \begin_inset CommandInset href
 LatexCommand href
 name "WAR"
@@ -291,7 +293,7 @@ target "http://en.wikipedia.org/wiki/WAR_(Sun_file_format)"
 
 \end_inset
 
- files and run as a 
+ y se ejecutan como 
 \begin_inset CommandInset href
 LatexCommand href
 name "J/EE Servlets"
@@ -299,11 +301,11 @@ target "http://www.oracle.com/technetwork/java/index-jsp-135475.html"
 
 \end_inset
 
- or Servlet Filters.
- This book will provide you with the core concepts you need to successfully
- write Lift web applications.
- The book assumes knowledge of Servlets and Servlet containers, the Scala
- Language (Chapters 1-6 of 
+ o Filtros Servlet.
+ Este libro proveerá los conceptos fundamentales necesarios para excribir
+ aplicaciones web Lift.
+ El libro asume conocimiento de Servlets y contenedores de Servlets, el
+ lenguaje Scala (Capítulos 1-6 de 
 \shape italic
 
 \begin_inset CommandInset href
@@ -315,15 +317,15 @@ target "http://apress.com/book/view/9781430219897"
 
 
 \shape default
- gives you a good grounding in the language), build tools, program editors,
- web development including HTML and JavaScript, etc.
- Further, this book will not explore persistence.
- Lift has additional modules for persisting to relational and non-relational
- data stores.
- Lift doesn't distinguish as to how an object is materialized into the address
- space...
- Lift can treat any object any old way you want.
- There are many resources (including 
+ da una buena base del lenguaje), herramientas de construcción, editores
+ de programas, inclusión de HTML y JavaScript en desarrollo web,etc.
+ Adicionalmente, este libro no explorará la persistencia.
+ Lift tiene módulos adicionales para almacenamientos de datos persistentes
+ relacionales y no relacionales.
+ Lift no distingue en cuanto a cómo un objeto se materializa en un espacio
+ de direcciones ...
+ Lift puede tratar cualquier objeto de la manera que se desee.
+ Hay muchos recursos (incluyendo 
 \begin_inset CommandInset href
 LatexCommand href
 name "Exploring Lift"
@@ -331,13 +333,13 @@ target "http://exploring.liftweb.net/"
 
 \end_inset
 
-) that cover ways to persist data from a JVM.
+) que cubren formas de persistir datos de una JVM.
 \end_layout
 
 \begin_layout Standard
-Lift is different from most web frameworks and it's likely that Lift's differenc
-es will present a challenge and a friction if you are familiar with the
- MVC
+Lift es diferente a la mayoría de los frameworks web y es probable que las
+ diferencias de Lift sean in reto y un choque si se está familiarizado con
+ la escuela de frameworks web MVC 
 \begin_inset Index idx
 status open
 
@@ -347,58 +349,61 @@ MVC
 
 \end_inset
 
- school of web frameworks
+ 
 \begin_inset Foot
 status open
 
 \begin_layout Plain Layout
-This includes Ruby on Rails, Struts, Java Server Faces, Django, TurboGears,
+Esto incluye Ruby on Rails, Struts, Java Server Faces, Django, TurboGears,
  etc.
 \end_layout
 
 \end_inset
 
-.
- But Lift is different and Lift's differences give you more power to create
- interactive applications.
- Lift's differences lead to more concise web applications.
- Lift's differences result in more secure and scalable applications.
- Lift's differences let you be more productive and make maintaining applications
- easier for the future you or whoever is writing your applications.
- Please relax and work to understand Lift's differences...
- and see how you can make best use of Lift's features to build your web
- applications.
+.Pero Lift es diferente y estas diferencias proporcionan mas poder para crear
+ aplicaciones interactivas.
+ Las diferencias de Lift dan lugar a aplicaciones web mas concisas.
+ Las diferencias de Lift resultan en aplicaciones mas seguras y escalables.Las
+ diferencias de Lift, permiten ser más productivo y hacen más facil el mantenimi
+ento de aplicaciones en el futuro para quien las escribe.
+ Por favor relájese y trabaje para entender las diferencias de Lift ...
+ y vea cómo se puede hacer el mejor uso de las características de Lift para
+ construir sus aplicaciones web.
 \end_layout
 
 \begin_layout Standard
-Lift creates abstractions that allow easier expression of business logic
- and then maps those abstractions to HTTP and HTML.
- This approach differs from traditional web frameworks which build abstractions
- on top of HTTP and HTML and require the developer to bridge between common
- business logic patterns and the underlying protocol.
- The difference means that you spend more time thinking about your application
- and less time thinking about the plumbing.
+Lift crea abstracciones que permiten facilitar expresiones de la lógica
+ de negocios y mapea estas abstracciones a HTTP y HTML.
+ Este enfoque difiere de los frameworks web tradicionales los cuales construyen
+ abstracciones sobre HTTP y HTML y requieren que el desarrollador cree un
+ puente entre los patrones comunes de la lógica de negocios y el protocolo
+ subyacente.
+ La diferencia significa que se pasa más tiempo pensando en su aplicación
+ y menos tiempo en pensar en las tuberías o puentes de comunicación.
 \end_layout
 
 \begin_layout Standard
-I am a 
+Yo soy un 
 \begin_inset Quotes eld
 \end_inset
 
-concept learner.
+aprendiz de concepto
 \begin_inset Quotes erd
 \end_inset
 
- I learn concepts and then apply them over and over again as situations
- come up.
- This book focuses a lot on the concepts.
- If you're a concept learner and like my stream on conciousness style, this
- book will likely suit you well.
- On the other hand, it may not.
+.
+ Yo aprendo los conceptos y los aplico una y otra vez en situaciones que
+ surgen.
+ Este libro se enfoca mucho en los conceptos.
+ Si tu eres un aprendiz de conceptos y te gusta mi enfoque en un estilo
+ conciente, este libro probablemente te convenga.
+ Por otro lado puede que no.
+ 
 \end_layout
 
 \begin_layout Standard
-Up to date versions of this book are available in PDF form at 
+Hasta la fecha las versiones de este libro estan disponibles en formato
+ PDF en 
 \begin_inset Flex URL
 status collapsed
 
@@ -410,7 +415,7 @@ http://simply.liftweb.net/Simply_Lift.pdf
 \end_inset
 
 .
- The source code for this book is available at 
+ El código fuente para este libro está disponible en 
 \begin_inset CommandInset href
 LatexCommand href
 name "https://github.com/dpp/simply_lift"
@@ -422,8 +427,8 @@ target "https://github.com/dpp/simply_lift"
 \end_layout
 
 \begin_layout Standard
-If you've got questions, feedback, or improvements to this document, please
- join the conversation on the 
+Si se tiene preguntas, retroalimentacion, o mejoras a este documento, por
+ favor, unirse a la conversación en: 
 \begin_inset CommandInset href
 LatexCommand href
 name "Lift Google Group"
@@ -435,26 +440,26 @@ target "http://groups.google.com/group/liftweb"
 \end_layout
 
 \begin_layout Standard
-I'm a 
+Voy a 
 \begin_inset Quotes eld
 \end_inset
 
-roll up your sleaves and get your hands dirty with code
+subirme las mangas y ensuciarme las manos con código
 \begin_inset Quotes erd
 \end_inset
 
- kinda guy...
- so let's build a simple Chat application in Lift.
- This application will allow us to demonstrate some of Lift's core features
- as well as giving a 
+ calma chico ...
+ Asi que vamos a construir una simple aplicación de Chat en Lift.
+ Esta aplicación permitirá demostrarnos algunas de las características principal
+es de Lift, que será como una demostración de 
 \begin_inset Quotes eld
 \end_inset
 
-smack in the face
+bofetada en la cara
 \begin_inset Quotes erd
 \end_inset
 
- demonstration of how Lift is different.
+ del porqué Lift es diferente.
 \end_layout
 
 \begin_layout Chapter
