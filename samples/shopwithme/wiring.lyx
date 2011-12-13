@@ -1,21 +1,29 @@
-#LyX 1.6.9 created this file. For more info see http://www.lyx.org/
-\lyxformat 345
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
 \begin_document
 \begin_header
 \textclass book
 \use_default_options true
+\maintain_unincluded_children false
 \language english
+\language_package default
 \inputencoding auto
+\fontencoding global
 \font_roman default
 \font_sans default
 \font_typewriter default
 \font_default_family default
+\use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
 
 \graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
 \paperfontsize default
 \spacing single
 \use_hyperref false
@@ -23,9 +31,18 @@
 \use_geometry false
 \use_amsmath 1
 \use_esint 1
+\use_mhchem 1
+\use_mathdots 1
 \cite_engine basic
 \use_bibtopic false
+\use_indices false
 \paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation skip
@@ -36,8 +53,9 @@
 \paperpagestyle default
 \tracking_changes false
 \output_changes false
-\author "" 
-\author "" 
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
 \end_header
 
 \begin_body
@@ -47,44 +65,45 @@ Wiring
 \end_layout
 
 \begin_layout Standard
-Interactive web applications have many interdependent components on a single
- web page.
- For example (and this is the example we'll use for this chapter), you may
- have a shopping cart in your application.
- The shopping cart will contain items and quantities.
- As you add/remove items from the cart, the cart should update, along with
- the sub-total, the tax, the shipping and the grand total.
- Plus, the count of the items in the cart may be displayed on some pages
- without the cart contents.
- Keeping track of all of these dependencies for all the different page layouts
- is pretty tough work.
- When it comes to updating the site, the team must remember where all of
- the items are and how to update them and if they get one wrong, the site
- looks broken.
+Las aplicaciones web interactivas tienen muchos componentes que depende
+ entre si dentro de una sola página web.
+ Por ejemplo (y este es el ejemplo que se usará para este capítulo), puede
+ ser que se tenga un carrito de compras en una aplicación.
+ El carrito de compras contendrá artículos y cantidades.
+ A medida de que se agregan/eliminan artículos del carrito, el carrito debe
+ actualizarse, como también el sub-total, el impuesto, los gastos de envío
+ y el total final.
+ Ademas de, el total de artículos se puede mostrar en algunas páginas sin
+ mostrar el contenido del carrito.
+ Mantener el rastro de todas estas dependencias para todas las diferentes
+ páginas es un trabajo muy duro.
+ Cuando se tiene que actualizar el sitio, el equipo tiene que recordar donde
+ se encuentran todos los artículos, como actualizarlos, y si se equivocan
+ solo en uno, puede parecer que el sitio no esta funcionando correctamente.
 \end_layout
 
 \begin_layout Standard
-Lift's Wiring provides a simply solution to managing complex dependencies
- on a single page and on multiple tabs.
- Lift's Wiring allows you to declare the formulaic relationships among cells
- (like a spreadsheet) and then the user interface components (yes, there
- can be more than one component) associated with each cell.
- Lift will automatically update the dependent user interface components
- based on change in the predicates.
- Lift will do this on initial page render and with each Ajax or Comet update
- to the page.
+El Wiring de Lift proveé una solución simple al manejo de dependencias complejas
+ en una sola página o en varias pestañas.
+ El Wiring de Lift permite declarar las relaciones de fórmula entre celas
+ (como una hoja de cálculo) y luego los componentes de la interfaz de usuario
+ (si, puede ser más de un componente) asociado a cada celda.
+ Lift automáticamente actualizará los componentes de la interfaz de usuario
+ basandose en el cambio de los predicados.
+ Lift hará esto cuando la página se renderice inicialmente y en cada actualizaci
+ón Ajax o Comet.
  Put another way, Wiring is like a spreadsheet and the page will automatically
  get updated when any of the predicate values change such that the change
  results in a change in the display value.
 \end_layout
 
 \begin_layout Section
-Cells
+Celdas(Cells)
 \end_layout
 
 \begin_layout Standard
-Like a spreadsheet, Lift's Wiring is based on Cells.
- Cells come in three types: 
+Como una hoja de cálculo, Wiring en Lift se basa en Celdas(Cells).
+ Existen tres tipos de Celdas: 
 \family typewriter
 ValueCell
 \family default
@@ -92,7 +111,7 @@ ValueCell
 \family typewriter
 DynamicCell
 \family default
-, and 
+, y 
 \family typewriter
 FuncCell
 \family default
@@ -100,37 +119,39 @@ FuncCell
 \end_layout
 
 \begin_layout Standard
-A 
+Una celda del tipo 
 \family typewriter
 ValueCell
 \family default
- contains a value that is entered by a user or depends on some user action.
- A 
+ contiene un valor que es ingresado por el usuario o que depende de alguna
+ acción del usuario.
+ Una celda 
 \family typewriter
 ValueCell
 \family default
- may represent the items in our shopping cart or the tax rate.
+ puede representar los artículos del carrito de compras o la tasa de impuestos.
 \end_layout
 
 \begin_layout Standard
-A 
+Una celda del tipo 
 \family typewriter
 DynamicCell
 \family default
- contains a value that changes every time the cell is accessed.
- For example, a random number or the current time.
+ contiene un valor que cambia cada vez que se accesde a la celda.
+ Por ejemplo, un número aleatoreo o la hora actual.
 \end_layout
 
 \begin_layout Standard
-A 
+Una celda del tipo 
 \family typewriter
 FuncCell
 \family default
- has a value based on a formula applied to the value or other cells.
+ tiene un valor en base a una formula que es aplicada a los valores de otras
+ celdas.
 \end_layout
 
 \begin_layout Standard
-Let's see some code that demonstrates this:
+Se ve a continuación algo de código que demuestra esto:
 \end_layout
 
 \begin_layout Standard
@@ -159,24 +180,24 @@ val total = price.lift(_ * quantity)
 \end_layout
 
 \begin_layout Standard
-We define two 
+Se definieron dos 
 \family typewriter
 ValueCell
 \family default
-s, one for 
+s, uno parar 
 \family typewriter
-quantity
+cantidad(quantity) 
 \family default
- and the other for 
+y otra para el for 
 \family typewriter
-price
+precio
 \family default
-.
- Next, define the 
+(price).
+ A continuación, se define el 
 \family typewriter
 total
 \family default
- by 
+ haciendo un 
 \begin_inset Quotes eld
 \end_inset
 
@@ -184,16 +205,16 @@ lifting
 \begin_inset Quotes erd
 \end_inset
 
- the 
+ del 
 \family typewriter
-price
+precio(price)
 \family default
- in a formula that multiplies it by 
+ en una formula que lo multiplica por la 
 \family typewriter
-quantity
+cantidad(quantity
 \family default
-.
- Let's see how it works in the console:
+).
+ A continuación se ve como funciona en la consola:
 \end_layout
 
 \begin_layout Standard
@@ -330,29 +351,30 @@ res4: Double = 5.0
 
 \begin_layout Standard
 Okay...
- pretty nifty...
- we can define relationships that are arbitrarily complex between 
+ muy elegante...
+ se pueden definir ralaciones que son arbitrariamente complejas entre las
+ 
 \family typewriter
-Cell
+Celdas(Cell
 \family default
-s and they know how to calculate themselves.
+s) y estas ya saben como calcularse.
 \end_layout
 
 \begin_layout Section
-Hooking it up to the UI
+Contectarlo a la Interfaz de Usuario
 \end_layout
 
 \begin_layout Standard
-Now that we can declare relationships among cells, how do we associate the
- value of 
+Ahora que se pueden declaran relaciones entre las celdas, ¿Como se asocian
+ los valores de las 
 \family typewriter
-Cell
+Celdas(Cell
 \family default
-s with the user interface?
+s) con la interfaz de usuario?
 \end_layout
 
 \begin_layout Standard
-Turns out that it's pretty simple:
+Resulta que es bastante simple:
 \end_layout
 
 \begin_layout Standard
@@ -371,16 +393,16 @@ status open
 \end_layout
 
 \begin_layout Standard
-We associate the element with 
+Se asocia un elemento con 
 \family typewriter
 id="total"
 \family default
- with a function that displays the value in 
+ con una función que muestra el valor que tiene 
 \family typewriter
 total
 \family default
 .
- Here's the method definition:
+ A continuación se muestra la definición del método:
 \end_layout
 
 \begin_layout Standard
@@ -395,17 +417,17 @@ status open
 
 \begin_layout Plain Layout
 
-   * Given a Cell register the
+   * Dada una Celda(Cell) registra el
 \end_layout
 
 \begin_layout Plain Layout
 
-   * postPageJavaScript that will update the element with
+   * postPageJavaScript que actualizará el elemento con
 \end_layout
 
 \begin_layout Plain Layout
 
-   * a new value.
+   * un nuevo valor.
 \end_layout
 
 \begin_layout Plain Layout
@@ -415,7 +437,7 @@ status open
 
 \begin_layout Plain Layout
 
-   * @param cell the cell to associate with
+   * @param cell la celda con la cual asociar el elemento
 \end_layout
 
 \begin_layout Plain Layout
@@ -425,13 +447,13 @@ status open
 
 \begin_layout Plain Layout
 
-   * @return a function that will mutate the NodeSeq (an id attribute may
- be added if
+   * @return una función que mutara el NodeSeq ( un atributo id puede ser
+ añadido si 
 \end_layout
 
 \begin_layout Plain Layout
 
-   * there's none already defined)
+   * no existe todavía ninguno)
 \end_layout
 
 \begin_layout Plain Layout
@@ -450,8 +472,8 @@ status open
 \end_layout
 
 \begin_layout Standard
-Huh? that's a lot of mumbo-jumbo...
- what's a 
+Eh? esto es bastante confuso...
+ ¿Qué es un 
 \family typewriter
 postPageJavaScript
 \family default
@@ -459,114 +481,117 @@ postPageJavaScript
 \end_layout
 
 \begin_layout Standard
-So, here's the magic of 
+Por lo tanto, aquí esta la magia de 
 \family typewriter
 WiringUI
 \family default
-: Most web frameworks treat a page rendering as an event in time.
- Maybe (in the case of Seaside), there are some side effects of rendering
- that close over page rendering state such that when forms are submitted
- back, you get page state back.
- Lift treats a full HTML page render and subsequent Ajax requests on the
- page as a single event that has a single scope.
- This means that 
+: La mayoría de los frameworks web tratan el renderizado de una página como
+ un evento en el tiempo.
+ Quizas(en el caso de Seaside),  existen alguns efectos colaterales al renderiza
+r tan cerca al estado de la página tal es que cuando los formularios son
+ enviados de vuelta, obtienes nuevamente el estado de la página.
+ Lift trata el renderizado completo de una página y las solicitudes Ajax
+ posteriores de una página como un solo evento que tiene un solo ámbito.
+ Esto quiere decir que
 \family typewriter
-RequestVar
+ RequestVar
 \family default
-s populated during a page render are available during subsequent Ajax requests
- on that page.
- Part of the state that results in a page render is the 
+s pobladas durante el renderizado de una página estan disponibles durante
+ solicitudes Ajax posteriores en esa página.
+ Parte del estado que se traduce en un renderizado de una página es el 
 \family typewriter
 postPageJavaScript
 \family default
- which is a bucket of 
+ que es un cubo de 
 \family typewriter
 () => JsCmd
 \family default
- or a collection of functions that return JavaScript.
- Before responding to any HTTP request associated with the page, Lift runs
- all these functions and appends the resulting JavaScript to the response
- sent back to the browser.
- HTTP requests associated with the page include the initial page render,
- subsequent Ajax request associated with the page and associated Comet (long
- poll) requests generated by the page.
+ o una colección de funciones que devuelven JavaScript.
+ Antes de responder cualquier solicitud HTTP asociada con la página, Lift
+ ejecuta todas estas funciones y añade el JavaScript resultante a la respuesta
+ que es enviada de vuelta al navegador.
+ Las solicitues HTTP asociadas a la página incluyen el renderizado inicial
+ de la página, solcitudes posteriores asociadas a la página, y solicitudes
+ Comet(long poll) generadas por la página.
 \end_layout
 
 \begin_layout Standard
-For each 
+Para cada 
 \family typewriter
-Cell
+Celda(Cell)
 \family default
- that you wire up to the user interface, Lift captures the id of the DOM
- node (and if there's no id, Lift will assign one) and the current value
- of the 
+ que se ha integrado con la interfaz de usuario, Lift captura el id del
+ nodo del DOM (y si no existe un id, Lift le asigna uno) y el valor actual
+ de la 
 \family typewriter
-Cell
+Celda(Cell
 \family default
-.
- Lift generates a function that looks at the current 
+).
+ Lift genera una función que mira el valor actual de la 
 \family typewriter
-Cell
+Celda(Cell)
 \family default
- value and if it's changed, Lift generates JavaScript that updates the DOM
- node with the 
+ y si este cambio, Lift genera una JavaScript que actualiza el nodo del
+ DOM con el valor actual de la 
 \family typewriter
-Cell
+Celda(Cell
 \family default
-'s current value.
+).
 \end_layout
 
 \begin_layout Standard
-The result is that if an Ajax operation changes the value of a 
+El resultado es que si una operación Ajax cambia el valor de una Celda de
+ tipo 
 \family typewriter
 ValueCell
 \family default
-, then all the dependent cells will update and the associated DOM updates
- will be carried back with the HTTP response.
+, entonces todas las celdas dependientes serán actualizadas, y las actualizacion
+es asociadas con el DOM serán llevadas de vuelta con la respuesta HTPP.
 \end_layout
 
 \begin_layout Standard
-You have a lot of control over the display of the value.
- The 
+Se tiene mucho control sobre como mostrar el valor.
+ El método 
 \family typewriter
 asText
 \family default
- method creates a 
+ crea un 
 \family typewriter
 Text(cell.toString)
 \family default
 .
- However, 
+ Sin embargo, 
 \family typewriter
 WiringUI.apply
 \family default
- allows you to associate a function that converts the 
-\family typewriter
-Cell
-\family default
-'s type 
+ permite asociar una función que convierte el tipo 
 \family typewriter
 T
 \family default
- to a 
+ de la 
+\family typewriter
+Celda(Cell
+\family default
+) a un 
 \family typewriter
 NodeSeq
 \family default
 .
- Further, you can control the transition in the browser with a 
+ Adicionalmente se puede controlar la transición en el navegador con un
+ 
 \family typewriter
 jsEffect
 \family default
- (type signiture 
+ (firma de tipo 
 \family typewriter
 (String, Boolean, JsCmd) => JsCmd
 \family default
 ).
- There are pre-build 
+ Existen 
 \family typewriter
 jsEffects
 \family default
- based on jQuery including my favorite, 
+ pre construidos, basados en jQuery , incluyendo mi favorito, 
 \family typewriter
 fade
 \family default
@@ -585,12 +610,12 @@ status open
 
 \begin_layout Plain Layout
 
-   * Fade out the old value and fade in the new value
+   * Desaparece el valor antiguo y hace aparecer el nuevo valor
 \end_layout
 
 \begin_layout Plain Layout
 
-   * using jQuery fast fade.
+   * usando jQuery fast fade.
 \end_layout
 
 \begin_layout Plain Layout
@@ -654,7 +679,7 @@ status open
 \end_layout
 
 \begin_layout Standard
-Which you can use as: 
+Que se puede usar así: 
 \end_layout
 
 \begin_layout Standard
@@ -673,13 +698,13 @@ status open
 \end_layout
 
 \begin_layout Standard
-Now, when the total field updates, the old value will fade out and the new
- value will fade in...
+Ahora, cuando el campo total se actualize, el valor antiguo desaparecerá
+ y el valor nuevo aparecerá...
  cool.
 \end_layout
 
 \begin_layout Section
-Shared Shopping
+Compra compartida
 \end_layout
 
 \begin_layout Standard
